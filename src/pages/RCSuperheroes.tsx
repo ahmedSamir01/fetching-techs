@@ -14,12 +14,17 @@ function RCSuperheroesPage() {
   const { isLoading, data, isError, error } = useQuery<{ data: SuperHero[] }>(
     "super-heroes",
     fetchSuperHeroes,
-    {
-      staleTime: 30000,
-    }
+    {}
     // {
-    //   staleTime: 0,
+    //   staleTime: 0,  how many ms to wait to make a new fetch
     //   cacheTime: 5000,
+    //   refetchOnMount: "true", default
+    //   refetchOnMount: "always", override staletime
+    //   refetchOnWindowFocus: "true", default
+    //   refetchOnWindowFocus: "always", override staletime
+
+    // refetchInterval: false,
+    // refetchIntervalInBackground: false,
     // }
   );
 
