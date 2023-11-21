@@ -10,9 +10,17 @@ interface SuperHero {
 const fetchSuperHeroes = () => axios.get("http://localhost:4000/superheroes");
 
 function RCSuperheroesPage() {
+  // isLoading, data, isError, error, isFetching
   const { isLoading, data, isError, error } = useQuery<{ data: SuperHero[] }>(
     "super-heroes",
-    fetchSuperHeroes
+    fetchSuperHeroes,
+    {
+      staleTime: 30000,
+    }
+    // {
+    //   staleTime: 0,
+    //   cacheTime: 5000,
+    // }
   );
 
   if (isLoading) {
