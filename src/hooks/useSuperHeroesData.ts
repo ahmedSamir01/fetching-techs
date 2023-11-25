@@ -14,7 +14,7 @@ export const useCustomQuery = (
     {
       onSuccess,
       onError,
-      select: (data) => data.data.map((hero: { name: string }) => hero.name),
+      // select: (data) => data.data.map((hero: { name: string }) => hero.name),
     }
     // {
     //   staleTime: 0,  how many ms to wait to make a new fetch

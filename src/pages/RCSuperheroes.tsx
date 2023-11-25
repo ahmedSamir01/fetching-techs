@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { Link } from "react-router-dom";
 import { useCustomQuery } from "../hooks/useSuperHeroesData";
 
 interface SuperHero {
   name: string;
-  age: number;
-  superpower: string;
+  id: number;
+  alterEgo: string;
 }
 
 function RCSuperheroesPage() {
@@ -31,8 +32,12 @@ function RCSuperheroesPage() {
   return (
     <>
       <h2>Super Heroes Page</h2>
-      {data?.map((heroName: string) => (
-        <div key={heroName}>{heroName}</div>
+      {data?.data?.map((hero: SuperHero) => (
+        <div key={hero.id}>
+          <Link to={`/rq-super-heroes/${hero.id}`}>
+            {hero.id} {hero.name}
+          </Link>
+        </div>
       ))}
       <button onClick={refetch}>refetch</button>
     </>
