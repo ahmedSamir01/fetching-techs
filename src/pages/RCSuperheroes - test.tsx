@@ -1,6 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { useCustomQuery } from "../hooks/useSuperHeroesData";
+import axios from "axios";
+import { useQuery } from "react-query";
+import { useCutomQuery } from "../hooks/useCustomQuery";
 
 interface SuperHero {
   name: string;
@@ -9,7 +9,7 @@ interface SuperHero {
 }
 
 function RCSuperheroesPage() {
-  const onSuccess = (responseData: any) => {
+  const onSuccess = (responseData) => {
     console.log(responseData);
   };
 
@@ -17,9 +17,11 @@ function RCSuperheroesPage() {
     console.log("error");
   };
 
-  const { isLoading, data, isError, error, refetch } = useCustomQuery(
+  const { isLoading, data, isError, error, refetch } = useCutomQuery(
+    { url: "http://localhost:4000/superheroes" },
     onSuccess,
-    onError
+    onError,
+    "super-heroes"
   );
 
   if (isLoading) {
@@ -31,8 +33,8 @@ function RCSuperheroesPage() {
   return (
     <>
       <h2>Super Heroes Page</h2>
-      {data?.map((heroName: string) => (
-        <div key={heroName}>{heroName}</div>
+      {data?.data.map((hero: SuperHero) => (
+        <div>{hero.name}</div>
       ))}
       <button onClick={refetch}>refetch</button>
     </>
