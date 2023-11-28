@@ -3,7 +3,7 @@ import { useQuery } from "react-query";
 
 const fetchSuperHeroes = () => axios.get("http://localhost:4000/superheroes");
 
-export const useCustomQuery = (
+export const useSuperHeroesData = (
   onSuccess: (key: unknown) => void,
   onError: () => void
 ) => {

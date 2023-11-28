@@ -7,6 +7,9 @@ import { QueryClientProvider, QueryClient } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { RQSuperHeroPage } from "./pages/RQSuperHero";
 import { ParallelQueriesPage } from "./pages/ParallelQueries";
+import { DynamicParallelQueries } from "./pages/DynamicParallelQueries";
+import { DependentQueries } from "./pages/DependentQueries";
+import { PaginatedQueriesPage } from "./pages/PaginatedQueries.page";
 
 const queryClient = new QueryClient();
 
@@ -35,7 +38,19 @@ function App() {
               element={<RQSuperHeroPage />}
             />
             <Route path="/rq-parallel" element={<ParallelQueriesPage />} />
+            <Route
+              path="/dynamic-rq-parallel"
+              element={<DynamicParallelQueries />}
+            />
+            <Route
+              path="/dependent-rq"
+              element={<DependentQueries email="vishwas@example.com" />}
+            />
             <Route path="/rq-super-heroes" element={<RCSuperheroesPage />} />
+
+            <Route path="/rq-paginated" element={<PaginatedQueriesPage />} />
+            {/* <Route path="/rq-infinite" element={<InfiniteQueriesPage />} /> */}
+
             <Route path="/" element={<HomePage />} />
           </Routes>
         </div>

@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Link } from "react-router-dom";
-import { useCustomQuery } from "../hooks/useSuperHeroesData";
+import { useSuperHeroesData } from "../hooks/useSuperHeroesData";
 
-interface SuperHero {
+export interface SuperHero {
   name: string;
   id: number;
   alterEgo: string;
@@ -18,7 +18,7 @@ function RCSuperheroesPage() {
     console.log("error");
   };
 
-  const { isLoading, data, isError, error, refetch } = useCustomQuery(
+  const { isLoading, data, isError, error, refetch } = useSuperHeroesData(
     onSuccess,
     onError
   );
