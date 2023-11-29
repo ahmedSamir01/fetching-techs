@@ -1,7 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Link } from "react-router-dom";
-import { useSuperHeroesData } from "../hooks/useSuperHeroesData";
+import {
+  useAddSuperHeroData,
+  useSuperHeroesData,
+} from "../hooks/useSuperHeroesData";
+import { useState } from "react";
 
 export interface SuperHero {
   name: string;
@@ -10,6 +14,8 @@ export interface SuperHero {
 }
 
 function RCSuperheroesPage() {
+  const [name, setName] = useState("");
+  const [alterEgo, setAlterEgo] = useState("");
   const onSuccess = (responseData: any) => {
     console.log(responseData);
   };
@@ -23,6 +29,13 @@ function RCSuperheroesPage() {
     onError
   );
 
+  const { mutate: addHero } = useAddSuperHeroData();
+
+  const handleAddHeroClick = () => {
+    const hero = { name, alterEgo };
+    addHero(hero);
+  };
+
   if (isLoading) {
     return <h2>loading...</h2>;
   }
@@ -31,6 +44,19 @@ function RCSuperheroesPage() {
   }
   return (
     <>
+      <div>
+        <input
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+        <input
+          type="text"
+          value={alterEgo}
+          onChange={(e) => setAlterEgo(e.target.value)}
+        />
+        <button onClick={handleAddHeroClick}>Add Hero</button>
+      </div>
       <h2>Super Heroes Page</h2>
       {data?.data?.map((hero: SuperHero) => (
         <div key={hero.id}>
