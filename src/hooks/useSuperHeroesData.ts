@@ -1,10 +1,11 @@
-import axios from "axios";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { SuperHero } from "../pages/RCSuperheroes";
+import { request } from "../utils/axios-utils";
 
-const fetchSuperHeroes = () => axios.get("http://localhost:4000/superheroes");
-const addSuperHero = (hero: unknown) => {
-  return axios.post("http://localhost:4000/superheroes", hero);
+const fetchSuperHeroes = () => request({ url: "/superheroes" });
+const addSuperHero = (hero: SuperHero) => {
+  // return axios.post("http://localhost:4000/superheroes", hero);
+  return request({ url: "/superheroes", method: "post", data: hero });
 };
 
 export const useSuperHeroesData = (
@@ -39,14 +40,42 @@ export const useSuperHeroesData = (
 export const useAddSuperHeroData = () => {
   const queryClient = useQueryClient();
   return useMutation(addSuperHero, {
-    onSuccess: (data) => {
-      // queryClient.invalidateQueries("super-heroes");
+    // onSuccess: (data) => {
+    //   // refetch the main list (X)
+    //   // queryClient.invalidateQueries("super-heroes");
+
+    //   // use response to to update the main list without refetching again
+    //   queryClient.setQueryData("super-heroes", (oldQueryData) => {
+    //     return {
+    //       ...oldQueryData,
+    //       data: [...oldQueryData.data, data.data],
+    //     };
+    //   });
+    // },
+
+    // get the data that passed to the addSuperHero async fn, to optimisticlly update the UI
+    onMutate: async (newHero: SuperHero) => {
+      // cancel any refetches could happens, to avoid overwriting the optimistic update
+      await queryClient.cancelQueries("super-heroes");
+      const previousHeroData = queryClient.getQueryData("super-heroes");
       queryClient.setQueryData("super-heroes", (oldQueryData) => {
         return {
           ...oldQueryData,
-          data: [...oldQueryData.data, data.data],
+          data: [
+            ...oldQueryData.data,
+            { id: oldQueryData.data.length + 1, ...newHero },
+          ],
         };
       });
+      return {
+        previousHeroData,
+      };
+    },
+    onError: (_error, _hero, context) => {
+      queryClient.setQueryData("super-heroes", context.previousHeroData);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries("super-heroes");
     },
   });
 };
